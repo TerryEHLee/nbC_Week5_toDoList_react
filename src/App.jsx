@@ -92,6 +92,13 @@ const App = () => {
               value={context}
               onChange={addContextHandler}
             />
+
+            <label className='form-label'>Duedate</label>
+            <input
+              className='input'
+              value={dueDate}
+              onChange={addDueDateHandler}
+            />
           </div>
 
           <button className='add-button' onClick={addTodoHandler}>
@@ -105,7 +112,8 @@ const App = () => {
           return (
             <div key={item.id} className='component-style'>
               <h2>{item.plan}</h2>
-              <div>{item.context}</div>
+              <div>{item.context}</div> <br></br>
+              <div>{item.dueDate}</div>
               <div className='btn'>
                 <button
                   className='red-btn'
@@ -131,7 +139,8 @@ const App = () => {
           return (
             <div key={item.id} className='component-style'>
               <h2>{item.plan}</h2>
-              <div>{item.context}</div>
+              <div>{item.context}</div> <br></br>
+              <div>{item.dueDate}</div>
               <div className='btn'>
                 <button
                   className='red-btn'
