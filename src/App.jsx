@@ -1,60 +1,155 @@
-// 경로: src/App.js
+// Path: src/App.js
 
 import React, { useState } from "react";
-import Square from "./components/Square.jsx";
-import Button from "./components/Button.jsx";
 import "./App.css";
 
-//  User 컴포넌트를 분리해서 구현
-function User(props) {
-  return (
-    <div className='user-card'>
-      <div>{props.user.age}살 - </div>
-      <div>{props.user.name}</div>
-      {/* 2. 버튼을 컴포넌트로 바꾸기 */}
-      <Button onClick={() => props.handleDelete(props.user.id)}>
-        삭제하기
-      </Button>
-    </div>
-  );
-}
-
 const App = () => {
-  const [users, setUsers] = useState([
-    { id: 1, age: 30, name: "송중기" },
-    { id: 2, age: 24, name: "송강" },
-    { id: 3, age: 21, name: "김유정" },
-    { id: 4, age: 29, name: "구교환" },
+  const [todo, setTodo] = useState([
+    {
+      id: Math.random(),
+      plan: "reactHomework",
+      context: "making a video, explaining the process of counting app.",
+      dueDate: "06.18.Sun",
+    },
   ]);
-  const [name, setName] = useState(""); // <-- 유저의 입력값을 담을 상태
-  const addUserHandler = () => {
-    const newUser = {
-      id: users.length + 1,
-      age: 30,
-      name: name,
+
+  const [plan, setPlan] = useState("");
+  const [context, setContext] = useState("");
+  const [dueDate, setDueDate] = useState("");
+
+  const addPlanHandler = (event) => {
+    setPlan(event.target.value);
+  };
+
+  const addContextHandler = (event) => {
+    setContext(event.target.value);
+  };
+
+  const addDueDateHandler = (event) => {
+    setDueDate(event.target.value);
+  };
+
+  const addTodoHandler = (event) => {
+    event.preventDefault();
+    const newTodo = {
+      id: Math.random(),
+      plan,
+      context,
+      dueDate,
     };
 
-    setUsers([...users, newUser]);
+    setTodo([...todo, newTodo]);
+    setPlan("");
+    setContext("");
+    setDueDate("");
   };
-  const deleteUserHandler = (id) => {
-    const newUserList = users.filter((user) => user.id !== id);
-    setUsers(newUserList);
+
+  const deleteTodoHandler = (id) => {
+    const newTodo = todo.filter((todo) => todo.id !== id);
+    setTodo(newTodo);
   };
+
+  const completeHandler = (id) => {
+    const completeTodo = todo.filter((todo) => todo.id !== id);
+    const completeDoneTodo = todo.filter((plan) => plan.id === id);
+
+    setTodo(completeTodo);
+    setDoneTodo([...doneTodo, ...completeDoneTodo]);
+  };
+
+  const [doneTodo, setDoneTodo] = useState([
+    {
+      id: 1,
+      plan: "studying JS",
+      context: "Using JS, made movie Page!",
+      dueDate: "06.09.Fri.",
+    },
+  ]);
+
+  const doneRemoveHandler = (id) => {
+    const canceledTodo = doneTodo.find((todo) => todo.id === id);
+    const updatedDoneTodo = doneTodo.filter((todo) => todo.id !== id);
+
+    setDoneTodo(updatedDoneTodo);
+    setTodo([...todo, canceledTodo]);
+  };
+
   return (
-    <div className='app-container'>
-      <input
-        placeholder='이름을 입력해주세요'
-        value={name}
-        // 인풋 이벤트로 들어온 입력 값을 name의 값으로 업데이트
-        onChange={(e) => setName(e.target.value)}
-      />
-      {users.map((user) => {
-        return (
-          <User user={user} key={user.id} handleDelete={deleteUserHandler} />
-        );
-      })}
-      {/* //3. 버튼을 컴포넌트로 바꾸기 */}
-      <Button onClick={addUserHandler}>추가하기</Button>
+    <div className='frame'>
+      <nav className='nav'>
+        <div>Terry Todo List</div>
+        <div>Keep Going 🚀🔥💎</div>
+      </nav>
+      <form>
+        <div className='add-container'>
+          <div className='input-group'>
+            <label className='form-label'>Title</label>
+            <input className='input' value={plan} onChange={addPlanHandler} />
+
+            <label className='form-label'>Context</label>
+            <input
+              className='input'
+              value={context}
+              onChange={addContextHandler}
+            />
+          </div>
+
+          <button className='add-button' onClick={addTodoHandler}>
+            Add
+          </button>
+        </div>
+      </form>
+      <h1>Working..⚡️</h1>
+      <div className='app-style'>
+        {todo.map((item) => {
+          return (
+            <div key={item.id} className='component-style'>
+              <h2>{item.plan}</h2>
+              <div>{item.context}</div>
+              <div className='btn'>
+                <button
+                  className='red-btn'
+                  onClick={() => deleteTodoHandler(item.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className='green-btn'
+                  onClick={() => completeHandler(item.id)}
+                >
+                  Complete
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <h1>Done..!!🧸</h1>
+      <div className='app-style'>
+        {doneTodo.map((item) => {
+          return (
+            <div key={item.id} className='component-style'>
+              <h2>{item.plan}</h2>
+              <div>{item.context}</div>
+              <div className='btn'>
+                <button
+                  className='red-btn'
+                  onClick={() => doneRemoveHandler(item.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className='green-btn'
+                  onClick={() => deleteTodoHandler(item.id)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
